@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.PreUpdate;
+
 @RestController
 @RequestMapping("/api/project")
 public class ProjectController {
@@ -18,6 +20,7 @@ public class ProjectController {
 
     @PostMapping("")
     public ResponseEntity<Project> createNewProject(@RequestBody Project project) {
+        Project project1 = projectService.saveOrUpdateProject(project);
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
 }
