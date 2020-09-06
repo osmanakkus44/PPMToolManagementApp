@@ -1,6 +1,7 @@
 package com.enos.ppmtool.services;
 
 import com.enos.ppmtool.domain.Project;
+import com.enos.ppmtool.exceptions.ProjectIdException;
 import com.enos.ppmtool.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,12 @@ public class ProjectService {
     }
 
     public Project saveOrUpdateProject(Project project) {
-        // There can be a lot of logic
-        return projectRepository.save(project);
+
+        try {
+            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            return projectRepository.save(project);
+        } catch (Exception e) {
+            throw new ProjectIdException("Project Id '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+        }
     }
 }
