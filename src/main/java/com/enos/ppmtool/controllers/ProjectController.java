@@ -1,18 +1,15 @@
 package com.enos.ppmtool.controllers;
 
-import com.enos.ppmtool.domain.Project;
+import com.enos.ppmtool.model.Message;
+import com.enos.ppmtool.model.Project;
 import com.enos.ppmtool.services.MapValidationErrorService;
 import com.enos.ppmtool.services.ProjectService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/project")
@@ -33,14 +30,24 @@ public class ProjectController {
             return result;
         }
 
-        Project project1 = projectService.saveOrUpdateProject(project);
-        return new ResponseEntity<>(project, HttpStatus.CREATED);
+        Project returnedProject = projectService.saveOrUpdateProject(project);
+        return new ResponseEntity<>(returnedProject, HttpStatus.CREATED);
     }
 
     @GetMapping("/{projectId}")
     public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
-
         Project project = projectService.findProjectByIdentifier(projectId);
-        return new ResponseEntity<Project>(project,HttpStatus.OK);
+        return new ResponseEntity<>(project,HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public Iterable<Project> getAllProjects() {
+        return projectService.findAllProjects();
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<?> deleteById(@PathVariable String projectId) {
+        projectService.deleteProjectByIdentifier(projectId);
+        return new ResponseEntity<>(new Message("Project with ID " + projectId.toUpperCase() + " deleted succesfully."),HttpStatus.OK);
     }
 }

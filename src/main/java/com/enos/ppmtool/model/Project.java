@@ -1,4 +1,4 @@
-package com.enos.ppmtool.domain;
+package com.enos.ppmtool.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

@@ -1,6 +1,6 @@
 package com.enos.ppmtool.services;
 
-import com.enos.ppmtool.domain.Project;
+import com.enos.ppmtool.model.Project;
 import com.enos.ppmtool.exceptions.ProjectIdException;
 import com.enos.ppmtool.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
@@ -34,4 +34,16 @@ public class ProjectService {
         return project;
     }
 
+    public Iterable<Project> findAllProjects() {
+        return projectRepository.findAll();
+    }
+
+    public Project deleteProjectByIdentifier(String identifier) {
+        Project project = findProjectByIdentifier(identifier.toUpperCase());
+        if (project == null) {
+            throw new ProjectIdException("Project Id '" + identifier + "' does not exist." + "Can't delete project");
+        }
+        projectRepository.delete(project);
+        return project;
+    }
 }
